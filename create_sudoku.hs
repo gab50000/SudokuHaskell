@@ -4,9 +4,6 @@ type Field = Int
 
 type Sudoku = [[Field]]
 
--- isValidRow :: Sudoku -> Int -> bool
--- isValidCol :: Sudoku -> Int -> bool
--- isValidBox :: Sudoku -> Int -> Int -> bool
 getValidValues :: Sudoku -> (Int, Int) -> [Int] -> [Int]
 getValidValues sudoku (i, j) excluded_values = Set.toList $ foldl Set.difference one_to_nine [numbers_in_row, numbers_in_col, numbers_in_box, excluded]
   where
@@ -56,3 +53,12 @@ createSudoku sudoku (i, j) excluded
 
 empty_sudoku :: [[Int]]
 empty_sudoku = take 9 $ repeat $ take 9 $ repeat 0
+
+printSudoku :: Maybe Sudoku -> IO ()
+printSudoku Nothing = return ()
+printSudoku (Just []) = return ()
+printSudoku (Just (row : rest)) = print row >> printSudoku (Just rest)
+
+main = do
+  let sudoku = createSudoku empty_sudoku (0, 0) []
+  printSudoku sudoku
